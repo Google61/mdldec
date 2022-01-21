@@ -1,0 +1,25 @@
+name: mdldec CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: FWGS/xash3d-fwgs
+
+      - name: Build with NDK toolchain
+        run: cd utils/mdldec && make CC=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi19-clang
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2.3.1
+        with:
+          path: utils/mdldec/mdldec
+          name: mdldec
